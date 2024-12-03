@@ -51,6 +51,9 @@ class LTimer:
         """
         Get a string representation of the laundry performance.
         """
+        if self.previous_time is None:
+            return "Yay this is your first time doing laundry!!!"
+
         percent_delta = 1 - (self.get_time_difference() / self.previous_time)
         if percent_delta > 0:
             return f"You ran your laundry {int(percent_delta * 100 // 1)}% faster than your previous time!"

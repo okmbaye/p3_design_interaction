@@ -11,6 +11,19 @@ from laundry_system import LSystem
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
+LIGHT_BASKET_KEY = pygame.K_LEFT
+LIGHT_RESET_KEY =  pygame.K_DOWN
+DARK_BASKET_KEY = pygame.K_RIGHT
+DARK_RESET_KEY = pygame.K_UP
+TIDEPOD_KEY = pygame.K_SPACE
+
+LIGHT_COOLDOWN = 10
+DARK_COOLDOWN = 10
+
+WAIT_TIDEPOD_TIME = 1000
+WAIT_STAT_TIME = 1000
+
+
 class LaundryGui:
     """
     Class to represent a laundry program.
@@ -90,18 +103,20 @@ class LaundryGui:
         text_color = (70, 130, 180)
         rect_color = (70, 70, 70)
 
+        #create the text and center it on screen
         laundry_stat_txt = font.render(ltimer.get_statistic(), True, text_color)
         txt_rect = laundry_stat_txt.get_rect()
         txt_rect.center = (self.surface.get_width() // 2, self.surface.get_height() // 2)
 
         text_width, text_height = laundry_stat_txt.get_size()
 
+        #create the rectangle that sits behind the text
         rect_width = text_width + self.border
         rect_height = text_height + self.border
-
         rect = pygame.Rect(0, 0, rect_width, rect_height)
         rect.center = (self.surface.get_width() // 2, self.surface.get_height() // 2)
 
+        #draw the rectangle and text to screen
         pygame.draw.rect(self.surface, rect_color ,(rect))
         self.surface.blit(laundry_stat_txt, txt_rect)
 
@@ -114,6 +129,9 @@ class LaundryGui:
 
         Returns: nothing
         """
+        lsys = LSystem()
+        dark_button_cooldown = 0
+        light_button_cooldown = 0
     
         while True:
             # Process Pygame events
@@ -122,14 +140,56 @@ class LaundryGui:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+            # Handle the 5 sensor events here 
+            # (select light or dark load, increment light or dark basket, reset load)
+            light_button_cooldown -= 1
+            dark_button_cooldown -= 1
 
-                # Handle the 5 sensor events here 
-                # (select light or dark load, increment light or dark basket, reset load)
+            keys = pygame.key.get_pressed()
+            if (keys[LIGHT_BASKET_KEY] and light_button_cooldown <= 0):
+                lsys.get_light_basket().increase_count()
+                light_button_cooldown = LIGHT_COOLDOWN
 
-            else:
-                self.draw_main_screen()
+                if lsys.get_light_basket().at_capacity() and not lsys.get_timer().is_running:
+                    lsys.get_timer().start_timer()
+
+            if (keys[DARK_BASKET_KEY] and dark_button_cooldown <= 0):
+                lsys.get_dark_basket().increase_count()
+                dark_button_cooldown = DARK_COOLDOWN
+
+                if lsys.get_dark_basket().at_capacity() and not lsys.get_timer().is_running:
+                    lsys.get_timer().start_timer()
+            
+            if (keys[TIDEPOD_KEY]):
+                self.draw_tide_pod_rect()
                 pygame.display.update()
-                self.clock.tick(5)
+                pygame.time.wait(WAIT_TIDEPOD_TIME)
+            
+            if (keys[DARK_RESET_KEY]):
+                lsys.get_dark_basket().empty_basket()
+
+                if (lsys.get_timer().is_running) and not lsys.get_light_basket().at_capacity():
+
+                    self.draw_laundry_stat()
+                    lsys.get_timer().end_timer()
+
+                    pygame.display.update()
+                    pygame.time.wait(WAIT_STAT_TIME)
+
+            if (keys[LIGHT_RESET_KEY]):
+                lsys.get_light_basket().empty_basket()
+
+                if (lsys.get_timer().is_running) and not lsys.get_dark_basket().at_capacity():
+
+                    self.draw_laundry_stat()
+                    lsys.get_timer().end_timer()
+
+                    pygame.display.update()
+                    pygame.time.wait(WAIT_STAT_TIME)
+            
+            self.draw_main_screen()
+            pygame.display.update()
+            self.clock.tick(5)
                 
 
 if __name__ == "__main__":

@@ -151,14 +151,14 @@ class LaundryGui:
                 light_button_cooldown = LIGHT_COOLDOWN
 
                 if lsys.get_light_basket().at_capacity() and not lsys.get_timer().is_running:
-                    lsys.get_timer().start_timer()
+                    lsys.get_timer().start_timer(lsys.get_light_basket())
 
             if (keys[DARK_BASKET_KEY] and dark_button_cooldown <= 0):
                 lsys.get_dark_basket().increase_count()
                 dark_button_cooldown = DARK_COOLDOWN
 
                 if lsys.get_dark_basket().at_capacity() and not lsys.get_timer().is_running:
-                    lsys.get_timer().start_timer()
+                    lsys.get_timer().start_timer(lsys.get_dark_basket())
             
             if (keys[TIDEPOD_KEY]):
                 self.draw_tide_pod_rect()

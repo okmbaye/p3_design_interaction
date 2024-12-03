@@ -30,7 +30,7 @@ class LTimer:
         current_time = datetime.datetime.now()
         return current_time - self.start_time
 
-    def start_timer(self):
+    def start_timer(self, basket):
         """
         Start the laundry timer.
 
@@ -38,6 +38,7 @@ class LTimer:
         current_time = datetime.datetime.now()
         self.start_time = current_time
         self.is_running = True
+        self.current_basket = basket
 
     def end_timer(self):
         """
@@ -46,6 +47,7 @@ class LTimer:
         """
         self.is_running = False
         self.previous_time = self.get_time_difference()
+        self.current_basket = None
 
     def get_statistic(self):
         """

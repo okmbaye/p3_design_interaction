@@ -42,24 +42,44 @@ class LaundryGui:
 
         # Initialize display
         self.surface = pygame.display.set_mode((window + border,
-                                                window + border))   
+                                                window + border))
+        self.light_load = 0
+        self.dark_load = 0   
         self.clock = pygame.time.Clock()
         self.event_loop()
+        
 
 
     def draw_main_screen(self):
         """
         Draw the main program screen.
         """
-        # Background
+        #Background
         self.surface.fill((120, 120, 120))
     
         
-    def draw_tide_pod_rect(self) -> None:
+    def draw_tide_pod_rect(self, curr_system: LSystem) -> None:
         """
         When the user selects a load draw the recommended amount of tide pods to use.
         """
-        pass
+        light_count = curr_system.get_light_basket().get_count()
+        dark_count = curr_system.get_dark_basket().get_count()
+
+        total_items = light_count + dark_count
+        
+        recommended_pods = max(1, math.ceil(total_items / 10))
+        font = pygame.font.Font(None, 36)
+
+        recommendation_text = font.render(f"Recommended Tide Pods: {recommended_pods}", True, (255, 255, 255))
+        
+        text_width, text_height = recommendation_text.get_size()
+        rect_x = self.border
+        rect_y = self.window - self.border - text_height - 10
+        rect_width = text_width + 20
+        rect_height = text_height + 10
+
+        pygame.draw.rect(self.surface, (50, 50, 50), (rect_x, rect_y, rect_width, rect_height))
+        self.surface.blit(recommendation_text, (rect_x + 10, rect_y + 5))
 
 
     def draw_laundry_stat(self) -> None:

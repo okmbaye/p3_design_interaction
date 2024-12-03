@@ -1,3 +1,4 @@
+import datetime
 from typing import Union, Dict, Optional, List, Tuple
 from basket import Basket
 
@@ -19,33 +20,39 @@ class LTimer:
         self.current_basket = None
         self.is_running = False
 
-        def get_time_difference(self):
-            """
-            Get the difference between the start time and the current time.
+    def get_time_difference(self):
+        """
+        Get the difference between the start time and the current time.
 
-            Returns: None.
-            """
-            pass
+        Returns: None.
+        """
+        current_time = datetime.datetime.now()
+        return current_time - self.start_time
 
-        def start_timer(self):
-            """
-            Start the laundry timer.
+    def start_timer(self):
+        """
+        Start the laundry timer.
 
-            """
-            pass
+        """
+        current_time = datetime.datetime.now()
+        self.start_time = current_time
+        self.is_running = True
 
-        def end_timer(self):
-            """
-            Stop the laundry timer.
-    
-            """
-            pass
+    def end_timer(self):
+        """
+        Stop the laundry timer.
 
-        def get_statistic(self):
-            """
-            Get a string representation of the laundry performance.
-            """
-            pass
+        """
+        self.is_running = False
+        self.previous_time = self.get_time_difference
+         
+        
+
+    def get_statistic(self):
+        """
+        Get a string representation of the laundry performance.
+        """
+        return f"The time it took to run the last load was {self.previous_time}"
 
     
 

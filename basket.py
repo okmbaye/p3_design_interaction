@@ -16,36 +16,40 @@ class Basket:
         self.count = 0
         self.bsk_type = bsk_type
 
-        def increase_count(self):
-            """
-            Increase the count of a basket.
+    def increase_count(self):
+        """
+        Increase the count of a basket.
 
-            Returns: None.
-            """
-            pass
+        Returns: None.
+        """
+        self.count += 1
 
-        def is_full(self):
-            """
-            Check if the basket is full.
+    def is_full(self):
+        """
+        Check if the basket is full.
 
-            Returns [bool]: True if full, false otherwise.
-            """
-            pass
+        Returns [bool]: True if full, false otherwise.
+        """
+        return self.count == self.capacity
 
-        def get_count(self):
-            """
-            Get the basket count.
-    
-            Returns [int]: how many clothes are in the basket
-            """
-            pass
+    def get_count(self):
+        """
+        Get the basket count.
 
-        def get_load_size(self):
-            """
-            Get the load size of the of what is currently in the basket.
-            
-            Returns [str]: the type of load "small", "med", "large".
-            """
-            pass
+        Returns [int]: how many clothes are in the basket
+        """
+        return self.count
+
+    def get_load_size(self):
+        """
+        Get the load size of the of what is currently in the basket.
+        
+        Returns [str]: the type of load "small", "med", "large".
+        """
+        if self.count < 12:
+            return "small"
+        if self.count < 20:
+            return "med"
+        return "large"
 
     

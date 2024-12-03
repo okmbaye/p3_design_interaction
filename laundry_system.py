@@ -1,6 +1,6 @@
 from typing import Union, Dict, Optional, List, Tuple
 from basket import Basket
-from laundry_timer.py import LTimer
+from laundry_timer import LTimer
 
 class LSystem:
     """
@@ -20,26 +20,26 @@ class LSystem:
         self.timer = LTimer()
         self.load_type = None
 
-        def get_light_basket(self):
-            """
-            Get the light basket.
+    def get_light_basket(self):
+        """
+        Get the light basket.
 
-            """
-            pass
+        """
+        return self.light_basket
 
-        def get_dark_basket(self):
-            """
-            Get the dark basket.
+    def get_dark_basket(self):
+        """
+        Get the dark basket.
 
-            """
-            pass
+        """
+        return self.dark_basket
 
-        def get_timer(self):
-            """
-            Get the laundry timer.
-    
-            """
-            pass
+    def get_timer(self):
+        """
+        Get the laundry timer.
+
+        """
+        return self.timer
 
 
     

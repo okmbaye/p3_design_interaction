@@ -1,4 +1,5 @@
 import datetime
+import time
 from typing import Union, Dict, Optional, List, Tuple
 from basket import Basket
 
@@ -29,7 +30,7 @@ class LTimer:
         current_time = datetime.datetime.now()
         return current_time - self.start_time
 
-    def start_timer(self):
+    def start_timer(self, basket):
         """
         Start the laundry timer.
 
@@ -37,6 +38,7 @@ class LTimer:
         current_time = datetime.datetime.now()
         self.start_time = current_time
         self.is_running = True
+        self.current_basket = basket
 
     def end_timer(self):
         """
@@ -44,15 +46,22 @@ class LTimer:
 
         """
         self.is_running = False
-        self.previous_time = self.get_time_difference
-         
-        
+        self.previous_time = self.get_time_difference()
+        self.current_basket = None
 
     def get_statistic(self):
         """
         Get a string representation of the laundry performance.
         """
-        return f"The time it took to run the last load was {self.previous_time}"
+        if self.previous_time is None:
+            return "Yay this is your first time doing laundry!!!"
 
-    
-
+        percent_delta = 1 - (self.get_time_difference() / self.previous_time)
+        if percent_delta > 0:
+            return f"You ran your laundry {int(percent_delta * 100 // 1)}% faster than your previous time!"
+        
+        elif percent_delta < 0:
+            return f"You ran your laundry {int(percent_delta * -100 // 1)}% slower than your previous time."
+        
+        else:
+            return f"You were as quick as you were your previous time"

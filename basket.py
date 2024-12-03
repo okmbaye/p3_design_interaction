@@ -52,4 +52,21 @@ class Basket:
             return "med"
         return "large"
 
+    def empty_basket(self):
+        """
+        empties the basket
+
+        returns none
+        """
+        self.count = 0
+        return
+    
+    def at_capacity(self):
+        """
+        Returns true if the basket is at capacity and false if not
+
+        returns bool
+        """
+        return self.count >= self.capacity
+
     

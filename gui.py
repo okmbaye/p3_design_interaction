@@ -62,12 +62,28 @@ class LaundryGui:
         pass
 
 
-    def draw_laundry_stat(self) -> None:
+    def draw_laundry_stat(self, ltimer: LTimer) -> None:
         """
         When the user resets the laundry timer show their performance.
         """
-        pass
+        font = pygame.font.Font(None, 60)
+        text_color = (70, 130, 180)
+        rect_color = (70, 70, 70)
 
+        laundry_stat_txt = font.render(ltimer.get_statistic(), True, text_color)
+        txt_rect = laundry_stat_txt.get_rect()
+        txt_rect.center = (self.surface.get_width() // 2, self.surface.get_height() // 2)
+
+        text_width, text_height = laundry_stat_txt.get_size()
+
+        rect_width = text_width + self.border
+        rect_height = text_height + self.border
+
+        rect = pygame.Rect(0, 0, rect_width, rect_height)
+        rect.center = (self.surface.get_width() // 2, self.surface.get_height() // 2)
+
+        pygame.draw.rect(self.surface, rect_color ,(rect))
+        self.surface.blit(laundry_stat_txt, txt_rect)
 
     # Event loop to continuously draw board based on user interactions
     def event_loop(self) -> None:

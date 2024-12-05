@@ -266,8 +266,22 @@ class LaundryGui:
 
         pygame.draw.rect(self.surface, (245, 173, 95), prev_score_accent, 0, 10)
         pygame.draw.rect(self.surface, (245, 173, 95), curr_score_accent, 0, 10)
-        pygame.draw.rect(self.surface, (250, 233, 175), prev_score_title, 0, 7)
-        pygame.draw.rect(self.surface, (250, 233, 175), curr_score_title, 0, 7)
+        prev_title = pygame.draw.rect(self.surface, (250, 233, 175), prev_score_title, 0, 7)
+        curr_title = pygame.draw.rect(self.surface, (250, 233, 175), curr_score_title, 0, 7)
+
+        #previous time text
+        prev_score_text = pygame.font.SysFont("Impact", 32)
+        prev_score_render = prev_score_text.render("PREVIOUS TIME", True, (207, 78, 14))
+        prev_score_rect = prev_score_render.get_rect()
+        prev_score_rect.center = prev_title.center
+        self.surface.blit(prev_score_render, prev_score_rect)
+
+        #current time text
+        curr_score_text = pygame.font.SysFont("Impact", 32)
+        curr_score_render = curr_score_text.render("NEW TIME", True, (207, 78, 14))
+        curr_score_rect = curr_score_render.get_rect()
+        curr_score_rect.center = curr_title.center
+        self.surface.blit(curr_score_render, curr_score_rect)
 
 
         prev_num_title = (180, 285, 180, 125)
@@ -277,13 +291,34 @@ class LaundryGui:
 
         pygame.draw.rect(self.surface, (245, 173, 95), prev_num_accent, 0, 10)
         pygame.draw.rect(self.surface, (245, 173, 95), curr_num_accent, 0, 10)
-        pygame.draw.rect(self.surface, (250, 233, 175), prev_num_title, 0, 7)
-        pygame.draw.rect(self.surface, (250, 233, 175), curr_num_title, 0, 7)
+        prev_num_title_rect = pygame.draw.rect(self.surface, (250, 233, 175), prev_num_title, 0, 7)
+        curr_num_title_rect = pygame.draw.rect(self.surface, (250, 233, 175), curr_num_title, 0, 7)
+
+        #previous time text
+        prev_num_text = pygame.font.SysFont("Impact", 32)
+        prev_num_render = prev_num_text.render(ltimer.str_timer(ltimer.previous_time), True, (207, 78, 14))
+        prev_num_rect = prev_num_render.get_rect()
+        prev_num_rect.center = prev_num_title_rect.center
+        self.surface.blit(prev_num_render, prev_num_rect)
+
+        #current time text
+        curr_num_text = pygame.font.SysFont("Impact", 32)
+        curr_num_render = curr_num_text.render(ltimer.str_timer(ltimer.get_time_difference()), True, (207, 78, 14))
+        curr_num_rect = curr_num_render.get_rect()
+        curr_num_rect.center = curr_num_title_rect.center
+        self.surface.blit(curr_num_render, curr_num_rect)
 
         stats_rect = (185, 440, 390, 50)
         stats_accent = (180, 435, 400, 60)
         pygame.draw.rect(self.surface, (245, 173, 95), stats_accent, 0, 10)
-        pygame.draw.rect(self.surface, (250, 233, 175), stats_rect, 0, 7)
+        stat_rect_obj = pygame.draw.rect(self.surface, (250, 233, 175), stats_rect, 0, 7)
+
+        #stats text
+        stat_text = pygame.font.SysFont("Impact", 32)
+        stat_render = stat_text.render(ltimer.get_statistic(), True, (207, 78, 14))
+        stat_rect = stat_render.get_rect()
+        stat_rect.center = stat_rect_obj.center
+        self.surface.blit(stat_render, stat_rect)
 
         # TODO Handling score report text, prev, curr, and stats
 
@@ -325,7 +360,7 @@ class LaundryGui:
         lsys = self.current_system 
         dark_button_cooldown = 0
         light_button_cooldown = 0
-    
+
         while True:
             # Process Pygame events
             events = pygame.event.get()
@@ -333,6 +368,7 @@ class LaundryGui:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+
             # Handle the 5 sensor events here 
             # (select light or dark load, increment light or dark basket, reset load)
             light_button_cooldown -= 1

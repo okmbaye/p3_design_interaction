@@ -54,14 +54,31 @@ class LTimer:
         Get a string representation of the laundry performance.
         """
         if self.previous_time is None:
-            return "Yay this is your first time doing laundry!!!"
+            return "This is your first time doing laundry!"
 
         percent_delta = 1 - (self.get_time_difference() / self.previous_time)
         if percent_delta > 0:
-            return f"You ran your laundry {int(percent_delta * 100 // 1)}% faster than your previous time!"
+            return f"You were {int(percent_delta * 100 // 1)}% faster!"
         
         elif percent_delta < 0:
-            return f"You ran your laundry {int(percent_delta * -100 // 1)}% slower than your previous time."
+            return f"You were{int(percent_delta * -100 // 1)}% slower!"
         
         else:
-            return f"You were as quick as you were your previous time"
+            return f"You were as quick as last time!"
+        
+    def str_timer (self, time):
+        """
+        gets the string version of the time
+
+        Inputs:
+            time: (datetime.timedelta) time
+
+        returns str of time
+        """
+        if time is None:
+            return("No time")
+        
+        days = time.days
+        hours, remainder = divmod(time.seconds, 3600)
+        minutes, _ = divmod(remainder, 60)
+        return f"{days} days {hours} hours {minutes} minutes"

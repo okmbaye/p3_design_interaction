@@ -18,9 +18,6 @@ DARK_BASKET_KEY = pygame.K_RIGHT
 DARK_RESET_KEY = pygame.K_UP
 TIDEPOD_KEY = pygame.K_SPACE
 
-LIGHT_COOLDOWN = 8
-DARK_COOLDOWN = 8
-
 WAIT_TIDEPOD_TIME = 3000
 WAIT_STAT_TIME = 1500
 SUCCESS_TIME = 2000
@@ -300,18 +297,58 @@ class LaundryGui:
         curr_num_title_rect = pygame.draw.rect(self.surface, (250, 233, 175), curr_num_title, 0, 7)
 
         #previous time text
-        prev_num_text = pygame.font.SysFont("Impact", 32)
-        prev_num_render = prev_num_text.render(ltimer.str_timer(ltimer.previous_time), True, (207, 78, 14))
-        prev_num_rect = prev_num_render.get_rect()
-        prev_num_rect.center = prev_num_title_rect.center
-        self.surface.blit(prev_num_render, prev_num_rect)
+        font_size = 32
+        if (ltimer.previous_time is None):
+            prev_num_text = pygame.font.SysFont("Impact", 32)
+            prev_num_render = prev_num_text.render("No Time", True, (207, 78, 14))
+            prev_num_rect = prev_num_render.get_rect()
+            prev_num_rect.center = prev_num_title_rect.center
+            self.surface.blit(prev_num_render, prev_num_rect)
+        else:
+            days, hours, minutes, seconds = ltimer.str_timer(ltimer.previous_time)
+            prev_day_text = pygame.font.SysFont("Impact", font_size)
+            prev_hour_text = pygame.font.SysFont("Impact", font_size)
+            prev_minute_text = pygame.font.SysFont("Impact", font_size)
+            prev_second_text = pygame.font.SysFont("Impact", font_size)
+            prev_day_render = prev_day_text.render(f"{days} days", True, (207, 78, 14))
+            prev_hour_render = prev_hour_text.render(f"{hours} hours", True, (207, 78, 14))
+            prev_minute_render = prev_minute_text.render(f"{minutes} minutes", True, (207, 78, 14))
+            prev_second_render = prev_second_text.render(f"{seconds} seconds", True, (207, 78, 14))
+            prev_day_rect = prev_day_render.get_rect()
+            prev_day_rect.center = (prev_num_title_rect.midbottom[0], prev_num_title_rect.midbottom[1] - (prev_num_title_rect.height // 5) * 4)
+            self.surface.blit(prev_day_render, prev_day_rect)
+            prev_hour_rect = prev_hour_render.get_rect()
+            prev_hour_rect.center = (prev_num_title_rect.midbottom[0], prev_num_title_rect.midbottom[1] - (prev_num_title_rect.height // 5) * 3)
+            self.surface.blit(prev_hour_render, prev_hour_rect)
+            prev_minute_rect = prev_minute_render.get_rect()
+            prev_minute_rect.center = (prev_num_title_rect.midbottom[0], prev_num_title_rect.midbottom[1] - (prev_num_title_rect.height // 5) * 2)
+            self.surface.blit(prev_minute_render, prev_minute_rect)
+            prev_second_rect = prev_second_render.get_rect()
+            prev_second_rect.center = (prev_num_title_rect.midbottom[0], prev_num_title_rect.midbottom[1] - (prev_num_title_rect.height // 5))
+            self.surface.blit(prev_second_render, prev_second_rect)
 
         #current time text
-        curr_num_text = pygame.font.SysFont("Impact", 32)
-        curr_num_render = curr_num_text.render(ltimer.str_timer(ltimer.get_time_difference()), True, (207, 78, 14))
-        curr_num_rect = curr_num_render.get_rect()
-        curr_num_rect.center = curr_num_title_rect.center
-        self.surface.blit(curr_num_render, curr_num_rect)
+        days, hours, minutes, seconds = ltimer.str_timer(ltimer.get_time_difference())
+        curr_day_text = pygame.font.SysFont("Impact", font_size)
+        curr_hour_text = pygame.font.SysFont("Impact", font_size)
+        curr_minute_text = pygame.font.SysFont("Impact", font_size)
+        curr_second_text = pygame.font.SysFont("Impact", font_size)
+        curr_day_render = curr_day_text.render(f"{days} days", True, (207, 78, 14))
+        curr_hour_render = curr_hour_text.render(f"{hours} hours", True, (207, 78, 14))
+        curr_minute_render = curr_minute_text.render(f"{minutes} minutes", True, (207, 78, 14))
+        curr_second_render = curr_second_text.render(f"{seconds} seconds", True, (207, 78, 14))
+        curr_day_rect = curr_day_render.get_rect()
+        curr_day_rect.center = (curr_num_title_rect.midbottom[0], curr_num_title_rect.midbottom[1] - (curr_num_title_rect.height // 5) * 4)
+        self.surface.blit(curr_day_render, curr_day_rect)
+        curr_hour_rect = curr_hour_render.get_rect()
+        curr_hour_rect.center = (curr_num_title_rect.midbottom[0], curr_num_title_rect.midbottom[1] - (curr_num_title_rect.height // 5) * 3)
+        self.surface.blit(curr_hour_render, curr_hour_rect)
+        curr_minute_rect = curr_minute_render.get_rect()
+        curr_minute_rect.center = (curr_num_title_rect.midbottom[0], curr_num_title_rect.midbottom[1] - (curr_num_title_rect.height // 5) * 2)
+        self.surface.blit(curr_minute_render, curr_minute_rect)
+        curr_second_rect = curr_second_render.get_rect()
+        curr_second_rect.center = (curr_num_title_rect.midbottom[0], curr_num_title_rect.midbottom[1] - (curr_num_title_rect.height // 5))
+        self.surface.blit(curr_second_render, curr_second_rect)
 
         stats_rect = (185, 440, 390, 50)
         stats_accent = (180, 435, 400, 60)
@@ -365,8 +402,6 @@ class LaundryGui:
         Returns: nothing
         """
         lsys = self.current_system 
-        dark_button_cooldown = 0
-        light_button_cooldown = 0
 
         while True:
             # Process Pygame events
@@ -378,13 +413,10 @@ class LaundryGui:
 
             # Handle the 5 sensor events here 
             # (select light or dark load, increment light or dark basket, reset load)
-            light_button_cooldown -= 1
-            dark_button_cooldown -= 1
 
             keys = pygame.key.get_pressed()
-            if (keys[LIGHT_BASKET_KEY] and light_button_cooldown <= 0):
+            if (keys[LIGHT_BASKET_KEY]):
                 lsys.get_light_basket().increase_count()
-                light_button_cooldown = LIGHT_COOLDOWN
 
                 if lsys.get_light_basket().at_capacity() and not lsys.get_timer().is_running:
                     lsys.get_timer().start_timer(lsys.get_light_basket())
@@ -392,9 +424,8 @@ class LaundryGui:
                 self.draw_success_screen(lsys)
                 pygame.time.wait(SUCCESS_TIME)
 
-            if (keys[DARK_BASKET_KEY] and dark_button_cooldown <= 0):
+            if (keys[DARK_BASKET_KEY]):
                 lsys.get_dark_basket().increase_count()
-                dark_button_cooldown = DARK_COOLDOWN
 
                 if lsys.get_dark_basket().at_capacity() and not lsys.get_timer().is_running:
                     lsys.get_timer().start_timer(lsys.get_dark_basket())

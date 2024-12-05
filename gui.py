@@ -178,7 +178,10 @@ class LaundryGui:
         active_text = pygame.font.SysFont("Impact", 25)
 
         if(self.current_system.timer.is_running):
-            active_render = active_text.render("TIME RUNNING", True, (125, 138, 51))
+            active_text = pygame.font.SysFont("Impact", 42)
+            days, hours, minutes, seconds = self.current_system.get_timer().str_timer(self.current_system.get_timer().get_time_difference())
+            time_str = f"{days}:{hours}:{minutes}:{seconds}"
+            active_render = active_text.render(time_str, True, (125, 138, 51))
         else:
             active_render = active_text.render("TIME OFF", True, (207, 78, 14))
         active_object = active_render.get_rect()

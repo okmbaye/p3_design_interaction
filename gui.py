@@ -61,6 +61,11 @@ class LaundryGui:
         self.light_load = 0
         self.dark_load = 0   
         self.clock = pygame.time.Clock()
+        s = 'sounds'
+        crowd_sound1 = pygame.mixer.Sound(os.path.join(s, 'crowd1.wav'))
+        crowd_sound2 = pygame.mixer.Sound(os.path.join(s, 'crowd2.wav'))
+        crowd_sound3 = pygame.mixer.Sound(os.path.join(s, 'crowd3.wav'))
+        self.sounds = [crowd_sound1, crowd_sound2, crowd_sound3]
         self.event_loop()
 
     def draw_main_screen(self):
@@ -384,7 +389,9 @@ class LaundryGui:
         # create a surface object, image is drawn on it.
         success = pygame.image.load(img_file)
         image = pygame.transform.scale(success, (550, 550))
+        pygame.mixer.Sound.play(self.sounds[photo_num-1], maxtime=3000)
         self.surface.blit(image, (100, 50))
+        
         pygame.display.flip()
 
        

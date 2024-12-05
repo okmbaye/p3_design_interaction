@@ -80,5 +80,5 @@ class LTimer:
         
         days = time.days
         hours, remainder = divmod(time.seconds, 3600)
-        minutes, _ = divmod(remainder, 60)
-        return f"{days} days {hours} hours {minutes} minutes"
+        minutes, seconds = divmod(remainder, 60)
+        return (days, hours, minutes, seconds)
